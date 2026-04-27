@@ -79,105 +79,127 @@ artemis-project/
 │   └── main.py
 │
 └── README.md
-💻 Frontend Setup
-Bash
+```
+
+---
+
+## 💻 Frontend Setup
+
+```bash
 cd frontend
 npm install
 npm run dev
-Note: The app runs at http://localhost:8080
+```
 
-⚙️ Backend Setup
-1. Create Virtual Environment
-Follow these steps to set up the backend using Conda:
+> **Note:** The app runs at `http://localhost:8080`
 
-Bash
+---
+
+## ⚙️ Backend Setup
+
+### 1. Create Virtual Environment
+
+```bash
 conda create -n artemis_backend python=3.11
 conda activate artemis_backend
-2. Install Dependencies
-Navigate to the backend folder and install the requirements:
+```
 
-Bash
+### 2. Install Dependencies
+
+```bash
 cd backend
 pip install -r requirements.txt
-3. Select Interpreter (VS Code Users)
-If you are using VS Code, this step is crucial to avoid "module not found" errors:
+```
 
-Press Ctrl + Shift + P (or Cmd + Shift + P on Mac).
+### 3. Select Interpreter (VS Code Users)
 
-Search and select: Python: Select Interpreter.
+> If you are using VS Code, this step is crucial to avoid "module not found" errors:
+> 1. Press `Ctrl + Shift + P` (or `Cmd + Shift + P` on Mac)
+> 2. Search and select: **Python: Select Interpreter**
+> 3. Choose: **artemis_backend (Python 3.11)**
 
-Choose: artemis_backend (Python 3.11).
+---
 
-🛢️ Database & Environment Setup
-1. MySQL Database Setup
+## 🛢️ Database & Environment Setup
+
+### 1. MySQL Database Setup
+
 Open MySQL on your machine and create the database:
 
-SQL
+```sql
 CREATE DATABASE artemis_db;
-2. Environment Variables
-Before running the backend, create a .env file inside the backend folder (backend/.env) and add the following variables:
+```
 
-Code snippet
+### 2. Environment Variables
+
+Create a `.env` file inside the `backend/` folder (`backend/.env`) and add:
+
+```env
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your_actual_password
 DB_NAME=artemis_db
-⚠️ Important: Ensure MySQL is running locally and replace DB_PASSWORD with your actual MySQL password.
+```
 
-3. Initialize Tables & Run Backend
-Starting the server for the first time will initialize your database tables. Make sure your Conda environment is active!
+> ⚠️ **Important:** Ensure MySQL is running locally and replace `DB_PASSWORD` with your actual MySQL password.
 
-Bash
+### 3. Initialize Tables & Run Backend
+
+Make sure your Conda environment is active, then start the server:
+
+```bash
 uvicorn app.main:app --reload
-Note: The backend will run at http://127.0.0.1:8000
+```
 
-🔌 API Endpoints
-POST /api/v1/upload
+> **Note:** The backend will run at `http://127.0.0.1:8000`
+>
+> Starting the server for the first time will automatically initialize your database tables.
 
-GET /api/v1/trajectory/{mission_id}
+---
 
-GET /api/v1/trajectory/full/{mission_id}
+## 🔌 API Endpoints
 
-GET /api/v1/analytics/{mission_id}
+| Method | Endpoint |
+|--------|----------|
+| `POST` | `/api/v1/upload` |
+| `GET` | `/api/v1/trajectory/{mission_id}` |
+| `GET` | `/api/v1/trajectory/full/{mission_id}` |
+| `GET` | `/api/v1/analytics/{mission_id}` |
 
-📊 Usage
-Start both the backend and frontend servers.
+---
 
-Open the UI and upload your trajectory CSV.
+## 📊 Usage
 
-Select the mission type (moon/satellite).
+1. Start both the backend and frontend servers
+2. Open the UI and upload your trajectory CSV
+3. Select the mission type (`moon` / `satellite`)
+4. View dashboard analytics
+5. Explore the interactive 3D trajectory
 
-View dashboard analytics.
+---
 
-Explore the interactive 3D trajectory.
+## 📁 CSV Data Format
 
-📁 CSV Data Format
-To successfully upload data, your CSV must include the following columns:
+Your CSV must include the following columns:
 
-time
+| Column | Required |
+|--------|----------|
+| `time` | ✅ |
+| `body` (spacecraft / moon / earth) | ✅ |
+| `x`, `y`, `z` | ✅ |
+| `vx`, `vy`, `vz` | ✅ |
+| `ax`, `ay`, `az` | ✅ |
+| `distance_from_earth` | ✅ |
+| `distance_from_moon` | ⚠️ Optional for satellite missions |
+| `speed` | ✅ |
+| `mission_phase` | ✅ |
+| `event_flag` | ✅ |
 
-body (spacecraft / moon / earth)
+---
 
-x, y, z
+## ⚠️ Notes & Gotchas
 
-vx, vy, vz
-
-ax, ay, az
-
-distance_from_earth
-
-distance_from_moon (optional for satellite missions)
-
-speed
-
-mission_phase
-
-event_flag
-
-⚠️ Notes / Gotchas
-Run Order: The backend must be running before you try to interact with the frontend.
-
-Data Integrity: Satellite missions do not include Moon data. Ensure your CSV format strictly follows the required schema to avoid pipeline errors.
-
-Environment: Always ensure your Conda environment (artemis_backend) is activated before starting the backend server or running scripts.
+- **Run Order:** The backend must be running before you interact with the frontend.
+- **Data Integrity:** Satellite missions do not include Moon data. Ensure your CSV strictly follows the required schema to avoid pipeline errors.
+- **Environment:** Always ensure your Conda environment (`artemis_backend`) is activated before starting the backend server or running any scripts.
