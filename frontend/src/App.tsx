@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import Trajectory from "./pages/Trajectory.tsx";
 import TrajectoryDemo from "./pages/TrajectoryDemo.tsx";
 import DataViewer from "./pages/DataViewer.tsx";
+import ImageLab from "./pages/ImageLab.tsx";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/trajectory" element={<TrajectoryDemo />} />
           <Route path="/trajectory/:id" element={<Trajectory />} />
           <Route path="/data" element={<DataViewer />} />
+          <Route path="/image-lab" element={<ImageLab />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,4 +1,4 @@
-import { Rocket, Upload, LayoutDashboard, Orbit, Table2, Radio } from "lucide-react";
+import { Rocket, Upload, LayoutDashboard, Orbit, Table2, Radio, ScanSearch } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -19,6 +19,7 @@ const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Trajectory 3D", url: "/trajectory", icon: Orbit },
   { title: "Data Viewer", url: "/data", icon: Table2 },
+  { title: "Image Lab", url: "/image-lab", icon: ScanSearch },
 ];
 
 export function AppSidebar() {

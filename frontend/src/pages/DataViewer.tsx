@@ -31,7 +31,7 @@ const DataViewer = () => {
     const fetchMissions = async () => {
       try {
         const res = await fetch(
-          "http://127.0.0.1:8000/api/v1/trajectory/missions"
+          "/api/v1/trajectory/missions"
         );
         const json = await res.json();
 
@@ -56,7 +56,7 @@ const DataViewer = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/api/v1/trajectory/${selectedMission}`
+          `/api/v1/trajectory/${selectedMission}`
         );
 
         const json = await res.json();

@@ -151,7 +151,7 @@ const Trajectory = () => {
 
     const fetchData = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/v1/trajectory/full/${activeId}`);
+        const res = await fetch(`/api/v1/trajectory/full/${activeId}`);
         const json = await res.json();
 
         if (json.mission_id !== Number(activeId)) {

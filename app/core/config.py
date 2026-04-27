@@ -14,12 +14,21 @@ class Settings(BaseSettings):
     DB_PASSWORD: str = "password"
     DB_NAME: str = "artemis_db"
 
+    DATABASE_URL_OVERRIDE: Optional[str] = None
+
     @property
     def DATABASE_URL(self) -> str:
-        return (
-            f"mysql+pymysql://{self.DB_USER}:{self.DB_PASSWORD}"
-            f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-        )
+        import os
+        env_url = os.environ.get("DATABASE_URL") or self.DATABASE_URL_OVERRIDE
+        if env_url:
+            # Normalize postgres:// -> postgresql+psycopg://
+            if env_url.startswith("postgres://"):
+                env_url = env_url.replace("postgres://", "postgresql+psycopg://", 1)
+            elif env_url.startswith("postgresql://") and "+" not in env_url.split("://", 1)[0]:
+                env_url = env_url.replace("postgresql://", "postgresql+psycopg://", 1)
+            return env_url
+        # Default: local SQLite file (no external DB dependencies)
+        return "sqlite:///./artemis.db"
 
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:5173"]
     MAX_UPLOAD_SIZE_MB: int = 50

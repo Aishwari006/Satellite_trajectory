@@ -63,7 +63,7 @@ const Dashboard = () => {
   const [metrics, setMetrics] = useState<any>(null);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/v1/trajectory/missions")
+    fetch("/api/v1/trajectory/missions")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch missions list");
         return res.json();
@@ -94,7 +94,7 @@ const Dashboard = () => {
 
     const fetchData = async () => {
       try {
-        const trajRes = await fetch(`http://127.0.0.1:8000/api/v1/trajectory/${activeId}`);
+        const trajRes = await fetch(`/api/v1/trajectory/${activeId}`);
         if (!trajRes.ok) throw new Error("Failed to fetch trajectory");
         const trajJson = await trajRes.json();
 
@@ -138,7 +138,7 @@ const Dashboard = () => {
         console.log("Trajectory length:", formatted.length);
         setTrajectory(formatted);
 
-        const analyticsRes = await fetch(`http://127.0.0.1:8000/api/v1/analytics/${activeId}`);
+        const analyticsRes = await fetch(`/api/v1/analytics/${activeId}`);
         if (analyticsRes.ok) {
           const analyticsJson = await analyticsRes.json();
           setMetrics(analyticsJson);

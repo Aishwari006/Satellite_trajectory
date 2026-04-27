@@ -64,7 +64,7 @@ const Upload = () => {
       formData.append("mission_type", missionType);
       formData.append("mission_name", missionName);
 
-      const res = await fetch("http://127.0.0.1:8000/api/v1/upload", {
+      const res = await fetch("/api/v1/upload", {
         method: "POST",
         body: formData,
       });

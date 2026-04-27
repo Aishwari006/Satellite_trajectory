@@ -8,13 +8,15 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-engine = create_engine(
-    settings.DATABASE_URL,
-    pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
-    echo=settings.DEBUG,
-)
+_db_url = settings.DATABASE_URL
+_engine_kwargs = dict(pool_pre_ping=True, echo=settings.DEBUG)
+if _db_url.startswith("sqlite"):
+    _engine_kwargs["connect_args"] = {"check_same_thread": False}
+else:
+    _engine_kwargs["pool_size"] = 10
+    _engine_kwargs["max_overflow"] = 20
+
+engine = create_engine(_db_url, **_engine_kwargs)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

@@ -50,7 +50,7 @@ const TrajectoryDemo = () => {
 
   // Fetch available missions for the dropdown
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/v1/trajectory/missions")
+    fetch("/api/v1/trajectory/missions")
       .then((res) => res.json())
       .then((data) => {
         setMissions(data);
