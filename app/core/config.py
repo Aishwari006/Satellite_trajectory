@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URL(self) -> str:
         import os
+        # 1. Explicit DATABASE_URL env var or override takes top priority
         env_url = os.environ.get("DATABASE_URL") or self.DATABASE_URL_OVERRIDE
         if env_url:
             # Normalize postgres:// -> postgresql+psycopg://
@@ -27,14 +28,20 @@ class Settings(BaseSettings):
             elif env_url.startswith("postgresql://") and "+" not in env_url.split("://", 1)[0]:
                 env_url = env_url.replace("postgresql://", "postgresql+psycopg://", 1)
             return env_url
-        # Default: local SQLite file (no external DB dependencies)
+        # 2. Build MySQL URL from individual DB_* settings (loaded from .env)
+        if self.DB_HOST and self.DB_NAME:
+            return (
+                f"mysql+pymysql://{self.DB_USER}:{self.DB_PASSWORD}"
+                f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+            )
+        # 3. Fallback: local SQLite file (no external DB dependencies)
         return "sqlite:///./artemis.db"
 
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:5173"]
     MAX_UPLOAD_SIZE_MB: int = 50
 
     class Config:
-        env_file = ".env"
+        env_file = ("app/.env", ".env")
         extra = "ignore"
 
 

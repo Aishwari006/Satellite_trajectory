@@ -48,8 +48,12 @@ def parse_csv(raw_bytes: bytes) -> pd.DataFrame:
 def df_to_trajectory_dicts(df: pd.DataFrame, mission_id: int) -> list[dict]:
     """
     Convert a processed DataFrame to a list of dicts suitable for bulk DB insert.
-    Only maps columns that exist in the DataFrame.
+    Uses to_dict for proper Python native type conversion (required by PyMySQL).
+    Explicitly replaces pd.NA / numpy.nan with None to avoid MySQL ProgrammingError.
+    Sets default 'body' to 'spacecraft' so the frontend filter matches it.
     """
+    raw_records = df.to_dict(orient="records")
+    
     column_map = {
         "time": "time",
         "body": "body",
@@ -68,14 +72,25 @@ def df_to_trajectory_dicts(df: pd.DataFrame, mission_id: int) -> list[dict]:
         "mission_phase": "mission_phase",
         "event_flag": "event_flag",
     }
-
+    
     records = []
-    for _, row in df.iterrows():
+    for row in raw_records:
         record: dict = {"mission_id": mission_id}
         for csv_col, db_col in column_map.items():
-            if csv_col in df.columns:
+            if csv_col in row:
                 val = row[csv_col]
-                record[db_col] = None if pd.isna(val) else val
+                # PyMySQL crashes if given float('nan'). Force it to None (NULL in DB).
+                if pd.isna(val):
+                    record[db_col] = None
+                else:
+                    record[db_col] = val
+        
+        # Ensure 'body' is set and lowercased so the frontend can query it
+        if "body" not in record or record["body"] is None or str(record["body"]).strip() == "":
+            record["body"] = "spacecraft"
+        else:
+            record["body"] = str(record["body"]).lower()
+            
         records.append(record)
 
-    return records  
+    return records
