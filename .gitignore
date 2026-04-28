@@ -50,3 +50,11 @@ build/
 # ========================
 coverage/
 .cache/
+
+# Local tool/generated folders
+.local/
+
+# Optional temp files
+tmp/
+temp/
+*.tmp
