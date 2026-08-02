@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     DB_HOST: str = "localhost"
     DB_PORT: int = 3306
     DB_USER: str = "root"
-    DB_PASSWORD: str = "password"
+    DB_PASSWORD: str = "Rasika"
     DB_NAME: str = "artemis_db"
 
     DATABASE_URL_OVERRIDE: Optional[str] = None
